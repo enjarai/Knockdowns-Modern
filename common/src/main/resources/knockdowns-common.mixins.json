@@ -1,12 +1,13 @@
 {
   "required": true,
-  "package": "net.knockdowns.mixin",
+  "package": "ru.octol1ttle.knockdowns.common.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "client": [
-    "ru.octol1ttle.knockdowns.mixin.MixinTitleScreen"
+    "client.ClientPlayerEntityMixin"
   ],
   "mixins": [
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,9 +1,9 @@
 package ru.octol1ttle.knockdowns.forge;
 
 import dev.architectury.platform.forge.EventBuses;
-import ru.octol1ttle.knockdowns.common.KnockdownsCommon;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import ru.octol1ttle.knockdowns.common.KnockdownsCommon;
 
 @Mod(KnockdownsCommon.MOD_ID)
 public class KnockdownsForge {

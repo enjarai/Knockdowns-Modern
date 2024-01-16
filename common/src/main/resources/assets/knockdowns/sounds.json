@@ -1,0 +1,10 @@
+{
+	"knocked_down": {
+		"subtitle": "subtitles.knockdowns.knocked_down",
+		"sounds": [
+			{
+				"name": "knockdowns:knocked_down"
+			}
+		]
+	}
+}
