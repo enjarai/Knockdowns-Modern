@@ -11,10 +11,10 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Hand;
 import net.minecraft.world.GameRules;
-import ru.octol1ttle.knockdowns.common.KnockdownsNetwork;
+import ru.octol1ttle.knockdowns.common.network.KnockdownsNetwork;
 import ru.octol1ttle.knockdowns.common.api.IKnockableDown;
-import ru.octol1ttle.knockdowns.common.packets.KnockedDownStatusPacket;
-import ru.octol1ttle.knockdowns.common.packets.PlayKnockedDownSoundS2CPacket;
+import ru.octol1ttle.knockdowns.common.network.packets.KnockedDownStatusPacket;
+import ru.octol1ttle.knockdowns.common.network.packets.PlayKnockedDownSoundS2CPacket;
 
 public class KnockdownsEvents {
     public static void registerCallbacks() {

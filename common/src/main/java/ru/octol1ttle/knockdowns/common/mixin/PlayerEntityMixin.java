@@ -15,9 +15,9 @@ import ru.octol1ttle.knockdowns.common.api.IKnockableDown;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin implements IKnockableDown {
     @Unique
-    private boolean knockedDown;
+    private boolean knockdowns$knockedDown;
     @Unique
-    private boolean beingRevived;
+    private boolean knockdowns$beingRevived;
 
     @ModifyExpressionValue(method = "updatePose", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isSwimming()Z"))
     private boolean enterSwimmingIfKnockedDown(boolean original) {
@@ -36,32 +36,32 @@ public abstract class PlayerEntityMixin implements IKnockableDown {
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     public void readKnockedDownFromNbt(NbtCompound nbt, CallbackInfo ci) {
-        this.knockedDown = nbt.getBoolean("KnockedDown");
+        this.knockdowns$knockedDown = nbt.getBoolean("KnockedDown");
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     public void writeKnockedDownToNbt(NbtCompound nbt, CallbackInfo ci) {
-        nbt.putBoolean("KnockedDown", this.knockedDown);
+        nbt.putBoolean("KnockedDown", this.knockdowns$knockedDown);
     }
 
     @Override
     public boolean knockdowns$isKnockedDown() {
-        return knockedDown;
+        return knockdowns$knockedDown;
     }
 
     @Override
     public void knockdowns$setKnockedDown(boolean knockedDown) {
-        this.knockedDown = knockedDown;
+        this.knockdowns$knockedDown = knockedDown;
     }
 
     @Override
     public boolean knockdowns$isBeingRevived() {
-        return beingRevived;
+        return knockdowns$beingRevived;
     }
 
     @Override
     public void knockdowns$setBeingRevived(boolean beingRevived) {
-        this.beingRevived = beingRevived;
+        this.knockdowns$beingRevived = beingRevived;
     }
 
     @Override

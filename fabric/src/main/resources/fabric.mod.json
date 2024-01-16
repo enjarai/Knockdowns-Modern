@@ -17,6 +17,9 @@
   "entrypoints": {
     "main": [
       "ru.octol1ttle.knockdowns.fabric.KnockdownsFabric"
+    ],
+    "client": [
+      "ru.octol1ttle.knockdowns.fabric.KnockdownsFabricClient"
     ]
   },
   "mixins": [

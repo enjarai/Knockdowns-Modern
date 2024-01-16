@@ -1,12 +1,10 @@
-package ru.octol1ttle.knockdowns.common.packets;
+package ru.octol1ttle.knockdowns.common.network.packets;
 
 import dev.architectury.networking.NetworkManager;
 import java.util.function.Supplier;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.Vec3d;
-import ru.octol1ttle.knockdowns.common.registries.KnockdownsSoundEvents;
-import ru.octol1ttle.knockdowns.common.registries.KnockedDownSoundInstance;
+import ru.octol1ttle.knockdowns.common.KnockdownsClient;
 
 public class PlayKnockedDownSoundS2CPacket extends KnockdownsPacket {
     private final double x;
@@ -33,8 +31,6 @@ public class PlayKnockedDownSoundS2CPacket extends KnockdownsPacket {
     @Override
     public void apply(Supplier<NetworkManager.PacketContext> contextSupplier) {
         NetworkManager.PacketContext context = contextSupplier.get();
-        context.queue(() -> MinecraftClient.getInstance().getSoundManager().play(
-                new KnockedDownSoundInstance(KnockdownsSoundEvents.KNOCKED_DOWN.get(), new Vec3d(this.x, this.y, this.z))
-        ));
+        context.queue(() -> KnockdownsClient.playKnockedDownSound(new Vec3d(this.x, this.y, this.z)));
     }
 }

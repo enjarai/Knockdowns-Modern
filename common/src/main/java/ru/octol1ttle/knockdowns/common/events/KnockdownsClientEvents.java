@@ -11,10 +11,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import ru.octol1ttle.knockdowns.common.KnockdownsNetwork;
+import ru.octol1ttle.knockdowns.common.network.KnockdownsNetwork;
 import ru.octol1ttle.knockdowns.common.api.IKnockableDown;
-import ru.octol1ttle.knockdowns.common.packets.KnockedDownStatusPacket;
-import ru.octol1ttle.knockdowns.common.packets.ReviveStatusPacket;
+import ru.octol1ttle.knockdowns.common.network.packets.KnockedDownStatusPacket;
+import ru.octol1ttle.knockdowns.common.network.packets.ReviveStatusPacket;
 
 public class KnockdownsClientEvents {
     private static final int REVIVAL_WAIT_TIME = 10 * SharedConstants.TICKS_PER_SECOND;
@@ -22,13 +22,13 @@ public class KnockdownsClientEvents {
     private static int revivalTimer = -1;
 
     public static void registerCallbacks() {
-        registerOnEntityLoad();
+        registerOnClientPlayerJoin();
         registerOnEntityUse();
         registerOnWorldTick();
         registerOnHudRender();
     }
 
-    private static void registerOnEntityLoad() {
+    private static void registerOnClientPlayerJoin() {
         ClientPlayerEvent.CLIENT_PLAYER_JOIN.register(player -> {
             UUID playerUuid = player.getUuid();
             KnockdownsNetwork.sendToServer(new KnockedDownStatusPacket.RequestC2S(playerUuid));
@@ -38,7 +38,7 @@ public class KnockdownsClientEvents {
 
     private static void registerOnEntityUse() {
         InteractionEvent.INTERACT_ENTITY.register((player, entity, hand) -> {
-            if (!(entity instanceof IKnockableDown knockableEntity) || !knockableEntity.knockdowns$isKnockedDown()
+            if (!player.getWorld().isClient() || !(entity instanceof IKnockableDown knockableEntity) || !knockableEntity.knockdowns$isKnockedDown()
                     || knockableEntity.knockdowns$isBeingRevived()) {
                 return EventResult.pass();
             }

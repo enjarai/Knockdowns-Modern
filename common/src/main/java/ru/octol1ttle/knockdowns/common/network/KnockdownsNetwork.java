@@ -1,4 +1,4 @@
-package ru.octol1ttle.knockdowns.common;
+package ru.octol1ttle.knockdowns.common.network;
 
 import dev.architectury.networking.NetworkChannel;
 import dev.architectury.networking.NetworkManager;
@@ -11,9 +11,10 @@ import net.minecraft.server.world.ServerChunkManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.server.world.ThreadedAnvilChunkStorage;
 import net.minecraft.util.Identifier;
-import ru.octol1ttle.knockdowns.common.packets.KnockedDownStatusPacket;
-import ru.octol1ttle.knockdowns.common.packets.PlayKnockedDownSoundS2CPacket;
-import ru.octol1ttle.knockdowns.common.packets.ReviveStatusPacket;
+import ru.octol1ttle.knockdowns.common.KnockdownsCommon;
+import ru.octol1ttle.knockdowns.common.network.packets.KnockedDownStatusPacket;
+import ru.octol1ttle.knockdowns.common.network.packets.PlayKnockedDownSoundS2CPacket;
+import ru.octol1ttle.knockdowns.common.network.packets.ReviveStatusPacket;
 
 public class KnockdownsNetwork {
     private static final NetworkChannel CHANNEL = NetworkChannel.create(new Identifier(KnockdownsCommon.MOD_ID, "main"));

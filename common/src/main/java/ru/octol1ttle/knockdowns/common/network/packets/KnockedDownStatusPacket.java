@@ -1,10 +1,10 @@
-package ru.octol1ttle.knockdowns.common.packets;
+package ru.octol1ttle.knockdowns.common.network.packets;
 
 import dev.architectury.networking.NetworkManager;
 import java.util.UUID;
 import java.util.function.Supplier;
 import net.minecraft.network.PacketByteBuf;
-import ru.octol1ttle.knockdowns.common.KnockdownsNetwork;
+import ru.octol1ttle.knockdowns.common.network.KnockdownsNetwork;
 import ru.octol1ttle.knockdowns.common.api.IKnockableDown;
 
 public class KnockedDownStatusPacket {
