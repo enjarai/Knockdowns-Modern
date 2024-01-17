@@ -7,6 +7,8 @@
     "client.ClientPlayerEntityMixin"
   ],
   "mixins": [
+    "LivingEntityMixin",
+    "MobEntityMixin",
     "PlayerEntityMixin"
   ],
   "injectors": {

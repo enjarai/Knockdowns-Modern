@@ -7,10 +7,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import ru.octol1ttle.knockdowns.common.api.IKnockableDown;
 
 @Mixin(ClientPlayerEntity.class)
-public abstract class ClientPlayerEntityMixin {
+public abstract class ClientPlayerEntityMixin implements IKnockableDown {
     @ModifyReturnValue(method = "shouldSlowDown", at = @At("RETURN"))
     private boolean shouldSlowDown(boolean original) {
-        IKnockableDown self = (IKnockableDown) this;
-        return original || self.knockdowns$isKnockedDown();
+        return original || this.is_KnockedDown();
     }
 }

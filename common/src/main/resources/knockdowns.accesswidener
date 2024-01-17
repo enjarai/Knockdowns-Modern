@@ -1,4 +1,1 @@
 accessWidener   v2  named
-
-accessible field net/minecraft/server/world/ThreadedAnvilChunkStorage entityTrackers Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;
-accessible field net/minecraft/server/world/ThreadedAnvilChunkStorage$EntityTracker listeners Ljava/util/Set;

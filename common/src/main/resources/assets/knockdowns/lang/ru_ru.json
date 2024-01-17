@@ -1,4 +1,6 @@
 {
+  "subtitles.knockdowns.knocked_down": "Игрок тяжело ранен",
+
   "knockdown.attack.anvil": "%1$s был тяжело ранен упавшей наковальней",
   "knockdown.attack.anvil.player": "%1$s был тяжело ранен упавшей наковальней, пока сражался с %2$s",
   "knockdown.attack.arrow": "%1$s тяжело ранен стрелой %2$s",
@@ -97,6 +99,5 @@
   "knockdown.fell.assist.item": "%1$s был тяжело ранен падением благодаря %2$s с помощью %3$s",
   "knockdown.fell.finish": "%1$s упал с высоты и был тяжело ранен %2$s",
   "knockdown.fell.finish.item": "%1$s упал с высоты и был тяжело ранен %2$s с помощью %3$s",
-  "knockdown.fell.killer": "%1$s был тяжело ранен падением",
-  "subtitles.knockdowns.knocked_down": "Игрок тяжело ранен"
+  "knockdown.fell.killer": "%1$s был тяжело ранен падением"
 }

@@ -1,15 +1,19 @@
 package ru.octol1ttle.knockdowns.common.api;
 
-import java.util.UUID;
-
 public interface IKnockableDown {
-    boolean knockdowns$isKnockedDown();
+    boolean is_KnockedDown();
 
-    void knockdowns$setKnockedDown(boolean knockedDown);
+    void set_KnockedDown(boolean knockedDown);
 
-    boolean knockdowns$isBeingRevived();
+    int get_ReviverCount();
 
-    void knockdowns$setBeingRevived(boolean beingRevived);
+    void set_ReviverCount(int reviverCount);
 
-    UUID knockdowns$getUuid();
+    boolean is_Reviving();
+
+    void set_Reviving(boolean reviving);
+
+    int get_ReviveTimer();
+
+    void set_ReviveTimer(int reviveTimer);
 }

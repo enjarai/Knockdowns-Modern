@@ -1,4 +1,6 @@
 {
+  "subtitles.knockdowns.knocked_down": "Player knocked down",
+
   "knockdown.attack.anvil": "%1$s was knocked down by a falling anvil",
   "knockdown.attack.anvil.player": "%1$s was knocked down by a falling anvil while fighting %2$s",
   "knockdown.attack.arrow": "%1$s was knocked down due to an arrow fired by %2$s",
@@ -97,6 +99,5 @@
   "knockdown.fell.assist.item": "%1$s was doomed to get knocked down by %2$s using %3$s",
   "knockdown.fell.finish": "%1$s fell too far and was knocked down by %2$s",
   "knockdown.fell.finish.item": "%1$s fell too far and was knocked down by %2$s using %3$s",
-  "knockdown.fell.killer": "%1$s was doomed to get knocked down by a fall",
-  "subtitles.knockdowns.knocked_down": "Player knocked down"
+  "knockdown.fell.killer": "%1$s was doomed to get knocked down by a fall"
 }
