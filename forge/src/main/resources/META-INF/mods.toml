@@ -9,7 +9,7 @@ version = "${version}"
 displayName = "Knockdowns"
 authors = "Octol1ttle"
 description = '''
-DNBO mechanic from Fortnite, ported to Minecraft
+DBNO mechanic from Fortnite, ported to Minecraft
 '''
 #logoFile = ""
 
