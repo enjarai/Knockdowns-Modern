@@ -31,11 +31,23 @@ public class KnockdownsEvents {
 
     private static void registerOnLivingDeath() {
         EntityEvent.LIVING_DEATH.register((entity, source) -> {
-            if (entity.getWorld().isClient() || !(entity instanceof IKnockableDown knockable) || knockable.is_KnockedDown()) {
+            if (entity.getWorld().isClient() || !(entity instanceof IKnockableDown knockable)) {
                 return EventResult.pass();
             }
 
             ServerPlayerEntity serverPlayer = (ServerPlayerEntity) entity;
+            MinecraftServer server = serverPlayer.getServer();
+            if (server == null || server.getCurrentPlayerCount() == 1) {
+                return EventResult.pass();
+            }
+
+            if (knockable.is_KnockedDown()) {
+                knockable.set_KnockedDown(false);
+                knockable.set_ReviverCount(0);
+                knockable.set_ReviveTimer(KnockdownsCommon.REVIVE_WAIT_TIME);
+
+                return EventResult.pass();
+            }
 
             entity.clearStatusEffects();
             entity.setInvulnerable(true);
@@ -53,10 +65,8 @@ public class KnockdownsEvents {
 
             TranslatableTextContent content = (TranslatableTextContent) entity.getDamageTracker().getDeathMessage().getContent();
             Text replaced = Text.translatableWithFallback(content.getKey().replace("death.", "knockdown."), content.getKey(), content.getArgs());
-            MinecraftServer server = serverPlayer.getServer();
-            if (server != null) {
-                server.getPlayerManager().broadcast(replaced, false);
-            }
+
+            server.getPlayerManager().broadcast(replaced, false);
 
             return EventResult.interruptFalse();
         });
