@@ -63,8 +63,9 @@ public class KnockdownsEvents {
 
             KnockdownsNetwork.sendToWorld(serverPlayer.getServerWorld(), new PlayKnockedDownSoundS2CPacket(serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ()));
 
-            TranslatableTextContent content = (TranslatableTextContent) entity.getDamageTracker().getDeathMessage().getContent();
-            Text replaced = Text.translatableWithFallback(content.getKey().replace("death.", "knockdown."), content.getKey(), content.getArgs());
+            Text deathMessage = entity.getDamageTracker().getDeathMessage();
+            TranslatableTextContent content = (TranslatableTextContent) deathMessage.getContent();
+            Text replaced = Text.translatableWithFallback(content.getKey().replace("death.", "knockdown."), deathMessage.getString(), content.getArgs());
 
             server.getPlayerManager().broadcast(replaced, false);
 
