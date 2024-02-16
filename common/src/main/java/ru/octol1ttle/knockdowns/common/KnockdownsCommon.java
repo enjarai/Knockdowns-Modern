@@ -1,8 +1,6 @@
 package ru.octol1ttle.knockdowns.common;
 
 import net.minecraft.SharedConstants;
-import net.minecraft.entity.player.PlayerEntity;
-import ru.octol1ttle.knockdowns.common.api.IKnockableDown;
 import ru.octol1ttle.knockdowns.common.events.KnockdownsEvents;
 import ru.octol1ttle.knockdowns.common.network.KnockdownsNetwork;
 import ru.octol1ttle.knockdowns.common.registries.KnockdownsSoundEvents;
@@ -15,9 +13,5 @@ public class KnockdownsCommon {
         KnockdownsSoundEvents.register();
         KnockdownsNetwork.registerPackets();
         KnockdownsEvents.registerCallbacks();
-    }
-
-    public static boolean isKnockedOrReviving(PlayerEntity player) {
-        return player instanceof IKnockableDown knockable && (knockable.is_KnockedDown() || knockable.is_Reviving());
     }
 }

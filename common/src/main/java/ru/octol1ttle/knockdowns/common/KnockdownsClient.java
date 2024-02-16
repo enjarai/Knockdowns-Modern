@@ -31,7 +31,7 @@ public class KnockdownsClient {
     }
 
     public static EventResult onEntityUse(PlayerEntity player, Entity entity) {
-        if (KnockdownsCommon.isKnockedOrReviving(player) || !(entity instanceof IKnockableDown knockable) || !knockable.is_KnockedDown()) {
+        if (KnockdownsUtils.isKnockedOrReviving(player) || !(entity instanceof IKnockableDown knockable) || !knockable.is_KnockedDown()) {
             return EventResult.pass();
         }
 
@@ -49,7 +49,7 @@ public class KnockdownsClient {
 
         boolean playerKnocked = ((IKnockableDown) player).is_KnockedDown();
         boolean revivingTargeted = client.crosshairTarget != null && client.crosshairTarget.getType() == HitResult.Type.ENTITY
-                && ((EntityHitResult) client.crosshairTarget).getEntity().getUuid().equals(reviving.getUuid());
+                && ((EntityHitResult) client.crosshairTarget).getEntity().equals(reviving);
 
         if (!(reviving instanceof IKnockableDown knockable)) {
             return;

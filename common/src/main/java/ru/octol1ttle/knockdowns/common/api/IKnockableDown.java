@@ -16,4 +16,8 @@ public interface IKnockableDown {
     int get_ReviveTimer();
 
     void set_ReviveTimer(int reviveTimer);
+
+    int get_KnockedAge();
+
+    void set_KnockedAge(int knockedAge);
 }

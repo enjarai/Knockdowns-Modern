@@ -6,21 +6,24 @@ import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.InteractionEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.event.events.common.TickEvent;
-import java.util.Objects;
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.SharedConstants;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.knockdowns.common.KnockdownsClient;
 import ru.octol1ttle.knockdowns.common.KnockdownsCommon;
+import ru.octol1ttle.knockdowns.common.KnockdownsUtils;
 import ru.octol1ttle.knockdowns.common.api.IKnockableDown;
 import ru.octol1ttle.knockdowns.common.network.KnockdownsNetwork;
 import ru.octol1ttle.knockdowns.common.network.packets.PlayKnockedDownSoundS2CPacket;
 
 public class KnockdownsEvents {
-    private static final float KNOCKED_DOWN_TIMER = 50.0f;
+    private static final float KNOCKED_INVULNERABILITY_TICKS = 3.0f * SharedConstants.TICKS_PER_SECOND;
+    private static final float KNOCKED_HURT_PERIOD = 1.2f;
+    private static final float KNOCKED_TENACITY = 60.0f;
 
     public static void registerCallbacks() {
         registerOnLivingDeath();
@@ -31,13 +34,14 @@ public class KnockdownsEvents {
 
     private static void registerOnLivingDeath() {
         EntityEvent.LIVING_DEATH.register((entity, source) -> {
-            if (entity.getWorld().isClient() || !(entity instanceof IKnockableDown knockable)) {
+            MinecraftServer server = entity.getServer();
+            if (server == null || !(entity instanceof IKnockableDown knockable)) {
                 return EventResult.pass();
             }
 
-            ServerPlayerEntity serverPlayer = (ServerPlayerEntity) entity;
-            MinecraftServer server = serverPlayer.getServer();
-            if (server == null || server.getCurrentPlayerCount() == 1) {
+            ServerPlayerEntity player = (ServerPlayerEntity) entity;
+
+            if (KnockdownsUtils.allTeammatesKnocked(server, player)) {
                 return EventResult.pass();
             }
 
@@ -45,6 +49,7 @@ public class KnockdownsEvents {
                 knockable.set_KnockedDown(false);
                 knockable.set_ReviverCount(0);
                 knockable.set_ReviveTimer(KnockdownsCommon.REVIVE_WAIT_TIME);
+                knockable.set_KnockedAge(0);
 
                 return EventResult.pass();
             }
@@ -56,12 +61,13 @@ public class KnockdownsEvents {
             entity.extinguish();
             entity.setAir(entity.getMaxAir());
             entity.setFrozenTicks(0);
-            serverPlayer.stopFallFlying();
+            player.stopFallFlying();
 
             knockable.set_KnockedDown(true);
             knockable.set_ReviveTimer(KnockdownsCommon.REVIVE_WAIT_TIME);
+            knockable.set_KnockedAge(0);
 
-            KnockdownsNetwork.sendToWorld(serverPlayer.getServerWorld(), new PlayKnockedDownSoundS2CPacket(serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ()));
+            KnockdownsNetwork.sendToWorld(player.getServerWorld(), new PlayKnockedDownSoundS2CPacket(player.getX(), player.getY(), player.getZ()));
 
             Text deathMessage = entity.getDamageTracker().getDeathMessage();
             TranslatableTextContent content = (TranslatableTextContent) deathMessage.getContent();
@@ -75,13 +81,20 @@ public class KnockdownsEvents {
 
     private static void registerOnPlayerTick() {
         TickEvent.PLAYER_POST.register(player -> {
-            if (player.getWorld().isClient()) {
+            MinecraftServer server = player.getServer();
+            if (server == null) {
                 KnockdownsClient.onPlayerTick(player);
                 return;
             }
             if (!(player instanceof IKnockableDown knockable) || !knockable.is_KnockedDown()) {
                 return;
             }
+
+            if (KnockdownsUtils.allTeammatesKnocked(server, player)) {
+                KnockdownsUtils.hurtTenacity(player, player.getMaxHealth());
+                return;
+            }
+
             if (knockable.get_ReviverCount() > 0) {
                 knockable.set_ReviveTimer(knockable.get_ReviveTimer() - knockable.get_ReviverCount());
 
@@ -89,6 +102,7 @@ public class KnockdownsEvents {
                     knockable.set_KnockedDown(false);
                     knockable.set_ReviverCount(0);
                     knockable.set_ReviveTimer(KnockdownsCommon.REVIVE_WAIT_TIME);
+                    knockable.set_KnockedAge(0);
 
                     player.setInvulnerable(false);
                     player.setGlowing(false);
@@ -96,38 +110,38 @@ public class KnockdownsEvents {
                 }
                 return;
             }
-            knockable.set_ReviveTimer(Math.min(KnockdownsCommon.REVIVE_WAIT_TIME, knockable.get_ReviveTimer() + 2));
+            knockable.set_ReviveTimer(Math.min(KnockdownsCommon.REVIVE_WAIT_TIME, knockable.get_ReviveTimer() + 1));
 
-            if (player.age % 20 == 0) {
-                player.setInvulnerable(false);
-                DamageSource recent = player.getRecentDamageSource();
-                player.damage(Objects.requireNonNullElse(recent, player.getDamageSources().generic()), player.getMaxHealth() / KNOCKED_DOWN_TIMER);
-                player.velocityModified = false;
+            knockable.set_KnockedAge(knockable.get_KnockedAge() + 1);
+
+            int period = MathHelper.floor(KNOCKED_HURT_PERIOD * SharedConstants.TICKS_PER_SECOND);
+            if (knockable.get_KnockedAge() >= KNOCKED_INVULNERABILITY_TICKS && knockable.get_KnockedAge() % period == 0) {
+                KnockdownsUtils.hurtTenacity(player, player.getMaxHealth() / (KNOCKED_TENACITY / KNOCKED_HURT_PERIOD));
             }
         });
     }
 
     private static void registerOnPlayerInteractions() {
         InteractionEvent.LEFT_CLICK_BLOCK.register((player, hand, pos, direction) -> {
-            if (KnockdownsCommon.isKnockedOrReviving(player)) {
+            if (KnockdownsUtils.isKnockedOrReviving(player)) {
                 return EventResult.interruptFalse();
             }
             return EventResult.pass();
         });
         PlayerEvent.ATTACK_ENTITY.register((player, world, hand, entity, hitResult) -> {
-            if (KnockdownsCommon.isKnockedOrReviving(player)) {
+            if (KnockdownsUtils.isKnockedOrReviving(player)) {
                 return EventResult.interruptFalse();
             }
             return EventResult.pass();
         });
         InteractionEvent.RIGHT_CLICK_ITEM.register((player, hand) -> {
-            if (KnockdownsCommon.isKnockedOrReviving(player)) {
+            if (KnockdownsUtils.isKnockedOrReviving(player)) {
                 return CompoundEventResult.interruptFalse(hand == Hand.MAIN_HAND ? player.getMainHandStack() : player.getOffHandStack());
             }
             return CompoundEventResult.pass();
         });
         InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, direction) -> {
-            if (KnockdownsCommon.isKnockedOrReviving(player)) {
+            if (KnockdownsUtils.isKnockedOrReviving(player)) {
                 return EventResult.interruptFalse();
             }
             return EventResult.pass();

@@ -30,6 +30,8 @@ public abstract class PlayerEntityMixin extends Entity implements IKnockableDown
     private static final TrackedData<Integer> REVIVER_COUNT = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.INTEGER);
     @Unique
     private static final TrackedData<Integer> REVIVE_TIMER = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    @Unique
+    public int knocked_age;
 
     private PlayerEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -65,12 +67,14 @@ public abstract class PlayerEntityMixin extends Entity implements IKnockableDown
     private void readKnockedDownFromNbt(NbtCompound nbt, CallbackInfo ci) {
         this.set_KnockedDown(nbt.getBoolean("KnockedDown"));
         this.set_ReviveTimer(nbt.getInt("ReviveTimer"));
+        this.set_KnockedAge(nbt.getInt("KnockedAge"));
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     private void writeKnockedDownToNbt(NbtCompound nbt, CallbackInfo ci) {
         nbt.putBoolean("KnockedDown", this.is_KnockedDown());
         nbt.putInt("ReviveTimer", this.get_ReviveTimer());
+        nbt.putInt("KnockedAge", this.get_KnockedAge());
     }
 
     @Override
@@ -111,5 +115,15 @@ public abstract class PlayerEntityMixin extends Entity implements IKnockableDown
     @Override
     public void set_ReviveTimer(int reviveTimer) {
         this.dataTracker.set(REVIVE_TIMER, reviveTimer);
+    }
+
+    @Override
+    public int get_KnockedAge() {
+        return knocked_age;
+    }
+
+    @Override
+    public void set_KnockedAge(int knockedAge) {
+        this.knocked_age = knockedAge;
     }
 }
