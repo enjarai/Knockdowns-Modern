@@ -70,10 +70,12 @@ public class KnockdownsEvents {
             KnockdownsNetwork.sendToWorld(player.getServerWorld(), new PlayKnockedDownSoundS2CPacket(player.getX(), player.getY(), player.getZ()));
 
             Text deathMessage = entity.getDamageTracker().getDeathMessage();
-            TranslatableTextContent content = (TranslatableTextContent) deathMessage.getContent();
-            Text replaced = Text.translatableWithFallback(content.getKey().replace("death.", "knockdown."), deathMessage.getString(), content.getArgs());
+            TranslatableTextContent deathContent = (TranslatableTextContent) deathMessage.getContent();
 
-            server.getPlayerManager().broadcast(replaced, false);
+            String knockdownKey = deathContent.getKey().replace("death.", "knockdown.");
+            Text knockdownMessage = Text.translatable(knockdownKey, deathContent.getArgs());
+
+            server.getPlayerManager().broadcast(!knockdownMessage.getString().equals(knockdownKey) ? knockdownMessage : deathMessage, false);
 
             return EventResult.interruptFalse();
         });
