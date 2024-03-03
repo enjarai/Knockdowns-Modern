@@ -15,7 +15,7 @@ public class KnockdownsUtils {
                 continue;
             }
             IKnockableDown knockable = (IKnockableDown) teammate;
-            if (!knockable.is_KnockedDown() && !player.isDead()) {
+            if (!knockable.is_KnockedDown() && !teammate.isDead()) {
                 return false;
             }
         }
