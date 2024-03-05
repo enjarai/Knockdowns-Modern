@@ -98,7 +98,7 @@ public class KnockdownsEvents {
 
                     player.setInvulnerable(false);
                     player.setGlowing(false);
-                    player.setHealth(6.0f);
+                    player.setHealth(player.getMaxHealth() * 0.3f);
                 }
                 return;
             }
