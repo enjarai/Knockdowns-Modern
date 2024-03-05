@@ -132,12 +132,6 @@ public class KnockdownsEvents {
             }
             return CompoundEventResult.pass();
         });
-        InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, direction) -> {
-            if (KnockdownsUtils.isKnockedOrReviving(player)) {
-                return EventResult.interruptFalse();
-            }
-            return EventResult.pass();
-        });
     }
 
     private static void registerOnEntityUse() {
