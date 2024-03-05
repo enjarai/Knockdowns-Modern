@@ -41,15 +41,8 @@ public class KnockdownsEvents {
 
             ServerPlayerEntity player = (ServerPlayerEntity) entity;
 
-            if (KnockdownsUtils.allTeammatesKnocked(server, player)) {
-                return EventResult.pass();
-            }
-
-            if (knockable.is_KnockedDown()) {
-                knockable.set_KnockedDown(false);
-                knockable.set_ReviverCount(0);
-                knockable.set_ReviveTimer(KnockdownsCommon.REVIVE_WAIT_TIME);
-                knockable.set_KnockedAge(0);
+            if (knockable.is_KnockedDown() || KnockdownsUtils.allTeammatesKnocked(server, player)) {
+                KnockdownsUtils.resetKnockedState(knockable);
 
                 return EventResult.pass();
             }
@@ -101,10 +94,7 @@ public class KnockdownsEvents {
                 knockable.set_ReviveTimer(knockable.get_ReviveTimer() - knockable.get_ReviverCount());
 
                 if (knockable.get_ReviveTimer() <= 0) {
-                    knockable.set_KnockedDown(false);
-                    knockable.set_ReviverCount(0);
-                    knockable.set_ReviveTimer(KnockdownsCommon.REVIVE_WAIT_TIME);
-                    knockable.set_KnockedAge(0);
+                    KnockdownsUtils.resetKnockedState(knockable);
 
                     player.setInvulnerable(false);
                     player.setGlowing(false);

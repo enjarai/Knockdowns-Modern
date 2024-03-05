@@ -28,4 +28,11 @@ public class KnockdownsUtils {
         player.damage(/*Objects.requireNonNullElse(recent, */player.getDamageSources().generic()/*)*/, damage);
         player.velocityModified = false;
     }
+
+    public static void resetKnockedState(IKnockableDown knockable) {
+        knockable.set_KnockedDown(false);
+        knockable.set_ReviverCount(0);
+        knockable.set_ReviveTimer(KnockdownsCommon.REVIVE_WAIT_TIME);
+        knockable.set_KnockedAge(0);
+    }
 }
