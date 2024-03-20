@@ -23,7 +23,6 @@
     ]
   },
   "mixins": [
-    "knockdowns.mixins.json",
     "knockdowns-common.mixins.json"
   ],
   "depends": {
