@@ -2,11 +2,13 @@ package ru.octol1ttle.knockdowns.common.events;
 
 import dev.architectury.event.CompoundEventResult;
 import dev.architectury.event.EventResult;
+import dev.architectury.event.events.common.BlockEvent;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.InteractionEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.SharedConstants;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -122,6 +124,12 @@ public class KnockdownsEvents {
         });
         PlayerEvent.ATTACK_ENTITY.register((player, world, hand, entity, hitResult) -> {
             if (KnockdownsUtils.isKnockedOrReviving(player)) {
+                return EventResult.interruptFalse();
+            }
+            return EventResult.pass();
+        });
+        BlockEvent.PLACE.register((level, pos, state, placer) -> {
+            if (placer instanceof PlayerEntity player && KnockdownsUtils.isKnockedOrReviving(player)) {
                 return EventResult.interruptFalse();
             }
             return EventResult.pass();
