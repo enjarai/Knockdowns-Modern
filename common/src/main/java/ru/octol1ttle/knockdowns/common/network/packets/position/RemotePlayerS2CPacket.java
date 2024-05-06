@@ -4,6 +4,7 @@ import dev.architectury.networking.NetworkManager;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.Vec3d;
 import ru.octol1ttle.knockdowns.common.api.RemotePlayer;
@@ -37,6 +38,13 @@ public class RemotePlayerS2CPacket extends KnockdownsPacket {
     @Override
     public void apply(Supplier<NetworkManager.PacketContext> contextSupplier) {
         NetworkManager.PacketContext context = contextSupplier.get();
-        context.queue(() -> KnockdownsClientEvents.remotePlayers.put(targetUuid, Optional.of(new RemotePlayer(this.eyePosition, this.knockedDown))));
+        context.queue(() -> {
+            //noinspection DataFlowIssue
+            if (MinecraftClient.getInstance().player.getUuid().equals(targetUuid)) {
+                KnockdownsClientEvents.remotePlayers.clear();
+            } else {
+                KnockdownsClientEvents.remotePlayers.put(targetUuid, Optional.of(new RemotePlayer(this.eyePosition, this.knockedDown)));
+            }
+        });
     }
 }

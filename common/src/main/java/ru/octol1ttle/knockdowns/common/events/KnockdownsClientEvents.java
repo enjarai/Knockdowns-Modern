@@ -117,7 +117,7 @@ public class KnockdownsClientEvents {
                     || client.player.getEyePos().distanceTo(eyePosition) > 64.0
                     || client.world
                         .raycast(new RaycastContext(
-                                client.player.getEyePos(),
+                                client.getEntityRenderDispatcher().camera.getPos(),
                                 eyePosition,
                                 RaycastContext.ShapeType.VISUAL,
                                 RaycastContext.FluidHandling.SOURCE_ONLY,
