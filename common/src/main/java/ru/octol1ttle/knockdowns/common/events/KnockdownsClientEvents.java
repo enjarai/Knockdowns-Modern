@@ -19,6 +19,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import ru.octol1ttle.knockdowns.common.KnockdownsClient;
+import ru.octol1ttle.knockdowns.common.KnockdownsCommon;
 import ru.octol1ttle.knockdowns.common.api.IKnockableDown;
 import ru.octol1ttle.knockdowns.common.api.RemotePlayer;
 import ru.octol1ttle.knockdowns.common.network.KnockdownsNetwork;
@@ -37,7 +38,7 @@ public class KnockdownsClientEvents {
         MinecraftClient client = MinecraftClient.getInstance();
         if (reviving == null) {
             reviving = (IKnockableDown) client.player;
-            if (reviving == null || reviving.get_ReviverCount() == 0) {
+            if (reviving == null || reviving.get_ReviveTimer() == KnockdownsCommon.REVIVE_WAIT_TIME) {
                 return;
             }
         }
@@ -48,7 +49,14 @@ public class KnockdownsClientEvents {
         int timerX = (context.getScaledWindowWidth() - renderer.getWidth(timerText)) / 2;
 
         int reviverCount = reviving.get_ReviverCount();
-        Integer color = reviverCount > 1 ? Formatting.GREEN.getColorValue() : Formatting.WHITE.getColorValue();
+        Integer color;
+        if (reviverCount == 0) {
+            color = Formatting.RED.getColorValue();
+        } else if (reviverCount == 1) {
+            color = Formatting.WHITE.getColorValue();
+        } else {
+            color = Formatting.GREEN.getColorValue();
+        }
 
         String reviverCountText = "x" + reviverCount;
         int reviveCountX = (context.getScaledWindowWidth() - renderer.getWidth(reviverCountText)) / 2;
@@ -105,7 +113,7 @@ public class KnockdownsClientEvents {
             int height = context.getScaledWindowHeight();
             int y = MathHelper.clamp(MathHelper.floor(result.vec().y - size * 0.5), size + 5, height - size - 5);
 
-            if (result.type() != ScreenSpaceTransformResult.ScreenSpaceTransformType.ON_SCREEN
+            if (result.type() != ScreenSpaceTransformResult.TransformType.ON_SCREEN
                     || client.player.getEyePos().distanceTo(eyePosition) > 64.0
                     || client.world
                         .raycast(new RaycastContext(

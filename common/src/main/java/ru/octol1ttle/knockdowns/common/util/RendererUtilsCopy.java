@@ -55,7 +55,7 @@ public class RendererUtilsCopy {
                             target.x / client.getWindow().getScaleFactor(),
                             (client.getWindow().getHeight() - target.y) / client.getWindow().getScaleFactor()
                     ),
-                    ScreenSpaceTransformResult.ScreenSpaceTransformType.ON_SCREEN
+                    ScreenSpaceTransformResult.TransformType.ON_SCREEN
             );
         }
 
@@ -69,7 +69,7 @@ public class RendererUtilsCopy {
 
         return new ScreenSpaceTransformResult(
                 new Vector2d(x, y),
-                ScreenSpaceTransformResult.ScreenSpaceTransformType.STUCK_TO_EDGES
+                ScreenSpaceTransformResult.TransformType.STUCK_TO_EDGES
         );
     }
 }

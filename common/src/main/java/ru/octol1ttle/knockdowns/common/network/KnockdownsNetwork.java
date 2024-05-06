@@ -9,6 +9,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import ru.octol1ttle.knockdowns.common.KnockdownsCommon;
 import ru.octol1ttle.knockdowns.common.network.packets.PlayKnockedDownSoundS2CPacket;
+import ru.octol1ttle.knockdowns.common.network.packets.position.RemotePlayerDimensionChangeS2CPacket;
 import ru.octol1ttle.knockdowns.common.network.packets.position.RemotePlayerS2CPacket;
 import ru.octol1ttle.knockdowns.common.network.packets.position.RequestRemotePlayerC2SPacket;
 import ru.octol1ttle.knockdowns.common.network.packets.reviving.RequestStartRevivingC2SPacket;
@@ -24,6 +25,7 @@ public class KnockdownsNetwork {
 
         CHANNEL.register(RequestRemotePlayerC2SPacket.class, RequestRemotePlayerC2SPacket::encode, RequestRemotePlayerC2SPacket::new, RequestRemotePlayerC2SPacket::apply);
         CHANNEL.register(RemotePlayerS2CPacket.class, RemotePlayerS2CPacket::encode, RemotePlayerS2CPacket::new, RemotePlayerS2CPacket::apply);
+        CHANNEL.register(RemotePlayerDimensionChangeS2CPacket.class, RemotePlayerDimensionChangeS2CPacket::encode, RemotePlayerDimensionChangeS2CPacket::new, RemotePlayerDimensionChangeS2CPacket::apply);
     }
 
     public static <T> void sendToServer(T message) {
