@@ -10,7 +10,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import ru.octol1ttle.knockdowns.common.KnockdownsClient;
 import ru.octol1ttle.knockdowns.common.KnockdownsCommon;
-import ru.octol1ttle.knockdowns.common.events.KnockdownsClientEvents;
 
 @SuppressWarnings("unused")
 @Mod(KnockdownsCommon.MOD_ID)
@@ -31,6 +30,6 @@ public class KnockdownsForge {
 
     @SubscribeEvent
     public void onHudRender(RenderGuiEvent.Pre event) {
-        KnockdownsClientEvents.onHudRender(event.getGuiGraphics());
+        KnockdownsClientForge.onHudRender(event);
     }
 }
