@@ -9,10 +9,9 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.knockdowns.common.api.IKnockableDown;
-import ru.octol1ttle.knockdowns.common.events.KnockdownsClientEvents;
 import ru.octol1ttle.knockdowns.common.network.KnockdownsNetwork;
-import ru.octol1ttle.knockdowns.common.network.packets.RequestStartRevivingC2SPacket;
-import ru.octol1ttle.knockdowns.common.network.packets.StopRevivingC2SPacket;
+import ru.octol1ttle.knockdowns.common.network.packets.reviving.RequestStartRevivingC2SPacket;
+import ru.octol1ttle.knockdowns.common.network.packets.reviving.StopRevivingC2SPacket;
 import ru.octol1ttle.knockdowns.common.registries.KnockdownsSoundEvents;
 import ru.octol1ttle.knockdowns.common.registries.KnockedDownSoundInstance;
 
@@ -21,7 +20,6 @@ public class KnockdownsClient {
     public static Entity reviving;
 
     public static void init() {
-        KnockdownsClientEvents.registerCallbacks();
     }
 
     public static void playKnockedDownSound(Vec3d pos) {
