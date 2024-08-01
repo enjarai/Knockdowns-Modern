@@ -50,3 +50,26 @@ allprojects {
         withSourcesJar()
     }
 }
+
+publishing {
+    repositories {
+        maven {
+            name = "enjaraiMaven"
+            url = "https://maven.enjarai.dev/releases"
+            credentials(PasswordCredentials)
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = group
+            artifactId = archivesBaseName
+            version = version
+
+            from components.java
+        }
+    }
+}

@@ -7,7 +7,7 @@ import ru.octol1ttle.knockdowns.common.registries.KnockdownsSoundEvents;
 
 public class KnockdownsCommon {
     public static final String MOD_ID = "knockdowns";
-    public static final int REVIVE_WAIT_TIME = 10 * SharedConstants.TICKS_PER_SECOND;
+    public static final int REVIVE_WAIT_TIME = 5 * SharedConstants.TICKS_PER_SECOND;
 
     public static void init() {
         KnockdownsSoundEvents.register();
