@@ -56,11 +56,11 @@ public abstract class PlayerEntityMixin extends Entity implements IKnockableDown
     }
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))
-    private void initCustomDataTracker(CallbackInfo ci) {
-        this.dataTracker.startTracking(KNOCKED_DOWN, false);
-        this.dataTracker.startTracking(IS_REVIVING, false);
-        this.dataTracker.startTracking(REVIVER_COUNT, 0);
-        this.dataTracker.startTracking(REVIVE_TIMER, KnockdownsCommon.REVIVE_WAIT_TIME);
+    private void initCustomDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
+        builder.add(KNOCKED_DOWN, false);
+        builder.add(IS_REVIVING, false);
+        builder.add(REVIVER_COUNT, 0);
+        builder.add(REVIVE_TIMER, KnockdownsCommon.REVIVE_WAIT_TIME);
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))

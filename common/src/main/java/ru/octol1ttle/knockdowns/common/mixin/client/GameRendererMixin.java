@@ -12,10 +12,10 @@ import ru.octol1ttle.knockdowns.common.util.RendererUtilsCopy;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
-    @Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z", opcode = Opcodes.GETFIELD, ordinal = 0), method = "renderWorld")
-    void renderer_postWorldRender(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
-        RendererUtilsCopy.lastProjMat.set(RenderSystem.getProjectionMatrix());
-        RendererUtilsCopy.lastModMat.set(RenderSystem.getModelViewMatrix());
-        RendererUtilsCopy.lastWorldSpaceMatrix.set(matrix.peek().getPositionMatrix());
-    }
+//    @Inject(at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z", opcode = Opcodes.GETFIELD, ordinal = 0), method = "renderWorld")
+//    void renderer_postWorldRender(float tickDelta, long limitTime, MatrixStack matrix, CallbackInfo ci) {
+//        RendererUtilsCopy.lastProjMat.set(RenderSystem.getProjectionMatrix());
+//        RendererUtilsCopy.lastModMat.set(RenderSystem.getModelViewMatrix());
+//        RendererUtilsCopy.lastWorldSpaceMatrix.set(matrix.peek().getPositionMatrix());
+//    }
 }

@@ -21,8 +21,6 @@ import ru.octol1ttle.knockdowns.common.KnockdownsUtils;
 import ru.octol1ttle.knockdowns.common.api.IKnockableDown;
 import ru.octol1ttle.knockdowns.common.network.KnockdownsNetwork;
 import ru.octol1ttle.knockdowns.common.network.packets.PlayKnockedDownSoundS2CPacket;
-import ru.octol1ttle.knockdowns.common.network.packets.position.RemotePlayerDimensionChangeS2CPacket;
-import ru.octol1ttle.knockdowns.common.network.packets.position.RemotePlayerS2CPacket;
 
 public class KnockdownsEvents {
     private static final float KNOCKED_INVULNERABILITY_TICKS = 3.0f * SharedConstants.TICKS_PER_SECOND;
@@ -117,11 +115,11 @@ public class KnockdownsEvents {
     }
 
     private static void registerOnDimensionChange() {
-        PlayerEvent.CHANGE_DIMENSION.register((player, oldLevel, newLevel) -> {
-            //noinspection DataFlowIssue
-            KnockdownsNetwork.sendToWorld(player.getServer().getWorld(oldLevel), new RemotePlayerDimensionChangeS2CPacket(player.getUuid()));
-            KnockdownsNetwork.sendToWorld(player.getServerWorld(), new RemotePlayerS2CPacket(player.getUuid(), player.getEyePos(), ((IKnockableDown)player).is_KnockedDown()));
-        });
+//        PlayerEvent.CHANGE_DIMENSION.register((player, oldLevel, newLevel) -> {
+//            //noinspection DataFlowIssue
+//            KnockdownsNetwork.sendToWorld(player.getServer().getWorld(oldLevel), new RemotePlayerDimensionChangeS2CPacket(player.getUuid()));
+//            KnockdownsNetwork.sendToWorld(player.getServerWorld(), new RemotePlayerS2CPacket(player.getUuid(), player.getEyePos(), ((IKnockableDown)player).is_KnockedDown()));
+//        });
     }
 
     private static void registerOnPlayerInteractions() {

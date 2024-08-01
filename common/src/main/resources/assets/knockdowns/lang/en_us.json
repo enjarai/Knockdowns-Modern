@@ -1,6 +1,10 @@
 {
   "subtitles.knockdowns.knocked_down": "Player knocked down",
 
+  "knockdown.knocked_down": "You are knocked down!",
+  "knockdown.give_up": "Hold %s to give up...",
+  "knockdown.giving_up": "Giving up... %d",
+
   "knockdown.attack.anvil": "%1$s was knocked down by a falling anvil",
   "knockdown.attack.anvil.player": "%1$s was knocked down by a falling anvil while fighting %2$s",
   "knockdown.attack.arrow": "%1$s was knocked down due to an arrow fired by %2$s",

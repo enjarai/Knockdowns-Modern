@@ -10,22 +10,23 @@ public class KnockdownsUtils {
     }
 
     public static boolean allTeammatesKnocked(MinecraftServer server, PlayerEntity player) {
-        for (PlayerEntity teammate : server.getPlayerManager().getPlayerList()) {
-            if (teammate.equals(player)) {
-                continue;
-            }
-            IKnockableDown knockable = (IKnockableDown) teammate;
-            if (!knockable.is_KnockedDown() && !teammate.isDead()) {
-                return false;
-            }
-        }
-        return true;
+//        for (PlayerEntity teammate : server.getPlayerManager().getPlayerList()) {
+//            if (teammate.equals(player)) {
+//                continue;
+//            }
+//            IKnockableDown knockable = (IKnockableDown) teammate;
+//            if (!knockable.is_KnockedDown() && !teammate.isDead()) {
+//                return false;
+//            }
+//        }
+//        return true;
+        return false;
     }
 
     public static void hurtTenacity(PlayerEntity player, float damage) {
         player.setInvulnerable(false);
         //DamageSource recent = player.getRecentDamageSource();
-        player.damage(/*Objects.requireNonNullElse(recent, */player.getDamageSources().generic()/*)*/, damage);
+//        player.damage(/*Objects.requireNonNullElse(recent, */player.getDamageSources().generic()/*)*/, damage);
         player.velocityModified = false;
     }
 

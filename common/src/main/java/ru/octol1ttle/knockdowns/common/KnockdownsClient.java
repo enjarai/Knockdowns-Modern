@@ -10,6 +10,7 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.knockdowns.common.api.IKnockableDown;
 import ru.octol1ttle.knockdowns.common.network.KnockdownsNetwork;
+import ru.octol1ttle.knockdowns.common.network.packets.GiveUpPacket;
 import ru.octol1ttle.knockdowns.common.network.packets.reviving.RequestStartRevivingC2SPacket;
 import ru.octol1ttle.knockdowns.common.network.packets.reviving.StopRevivingC2SPacket;
 import ru.octol1ttle.knockdowns.common.registries.KnockdownsSoundEvents;
@@ -18,6 +19,7 @@ import ru.octol1ttle.knockdowns.common.registries.KnockedDownSoundInstance;
 public class KnockdownsClient {
     @Nullable
     public static Entity reviving;
+    public static int givingUp;
 
     public static void init() {
     }
@@ -41,21 +43,37 @@ public class KnockdownsClient {
 
     public static void onPlayerTick(PlayerEntity player) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (!player.equals(client.player) || reviving == null) {
+        if (!player.equals(client.player)) {
             return;
         }
 
-        boolean playerKnocked = ((IKnockableDown) player).is_KnockedDown();
-        boolean revivingTargeted = client.crosshairTarget != null && client.crosshairTarget.getType() == HitResult.Type.ENTITY
-                && ((EntityHitResult) client.crosshairTarget).getEntity().equals(reviving);
+        if (((IKnockableDown) player).is_KnockedDown()) {
+            if (client.options.sneakKey.isPressed()) {
+                givingUp++;
 
-        if (!(reviving instanceof IKnockableDown knockable)) {
-            return;
+                if (givingUp > 100) {
+                    givingUp = 0;
+
+                    KnockdownsNetwork.sendToServer(new GiveUpPacket());
+                }
+            } else {
+                givingUp = 0;
+            }
         }
 
-        if (!knockable.is_KnockedDown() || playerKnocked || !revivingTargeted) {
-            KnockdownsNetwork.sendToServer(new StopRevivingC2SPacket(reviving.getUuid()));
-            reviving = null;
+        if (reviving != null) {
+            boolean playerKnocked = ((IKnockableDown) player).is_KnockedDown();
+            boolean revivingTargeted = client.crosshairTarget != null && client.crosshairTarget.getType() == HitResult.Type.ENTITY
+                    && ((EntityHitResult) client.crosshairTarget).getEntity().equals(reviving);
+
+            if (!(reviving instanceof IKnockableDown knockable)) {
+                return;
+            }
+
+            if (!knockable.is_KnockedDown() || playerKnocked || !revivingTargeted) {
+                KnockdownsNetwork.sendToServer(new StopRevivingC2SPacket(reviving.getUuid()));
+                reviving = null;
+            }
         }
     }
 }

@@ -8,24 +8,25 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import ru.octol1ttle.knockdowns.common.KnockdownsCommon;
+import ru.octol1ttle.knockdowns.common.network.packets.GiveUpPacket;
 import ru.octol1ttle.knockdowns.common.network.packets.PlayKnockedDownSoundS2CPacket;
-import ru.octol1ttle.knockdowns.common.network.packets.position.RemotePlayerDimensionChangeS2CPacket;
-import ru.octol1ttle.knockdowns.common.network.packets.position.RemotePlayerS2CPacket;
-import ru.octol1ttle.knockdowns.common.network.packets.position.RequestRemotePlayerC2SPacket;
 import ru.octol1ttle.knockdowns.common.network.packets.reviving.RequestStartRevivingC2SPacket;
 import ru.octol1ttle.knockdowns.common.network.packets.reviving.StopRevivingC2SPacket;
 
+@SuppressWarnings("removal")
 public class KnockdownsNetwork {
-    private static final NetworkChannel CHANNEL = NetworkChannel.create(new Identifier(KnockdownsCommon.MOD_ID, "main"));
+    private static final NetworkChannel CHANNEL = NetworkChannel.create(Identifier.of(KnockdownsCommon.MOD_ID, "main"));
     public static void registerPackets() {
         CHANNEL.register(PlayKnockedDownSoundS2CPacket.class, PlayKnockedDownSoundS2CPacket::encode, PlayKnockedDownSoundS2CPacket::new, PlayKnockedDownSoundS2CPacket::apply);
 
         CHANNEL.register(RequestStartRevivingC2SPacket.class, RequestStartRevivingC2SPacket::encode, RequestStartRevivingC2SPacket::new, RequestStartRevivingC2SPacket::apply);
         CHANNEL.register(StopRevivingC2SPacket.class, StopRevivingC2SPacket::encode, StopRevivingC2SPacket::new, StopRevivingC2SPacket::apply);
 
-        CHANNEL.register(RequestRemotePlayerC2SPacket.class, RequestRemotePlayerC2SPacket::encode, RequestRemotePlayerC2SPacket::new, RequestRemotePlayerC2SPacket::apply);
-        CHANNEL.register(RemotePlayerS2CPacket.class, RemotePlayerS2CPacket::encode, RemotePlayerS2CPacket::new, RemotePlayerS2CPacket::apply);
-        CHANNEL.register(RemotePlayerDimensionChangeS2CPacket.class, RemotePlayerDimensionChangeS2CPacket::encode, RemotePlayerDimensionChangeS2CPacket::new, RemotePlayerDimensionChangeS2CPacket::apply);
+        CHANNEL.register(GiveUpPacket.class, GiveUpPacket::encode, GiveUpPacket::new, GiveUpPacket::apply);
+
+//        CHANNEL.register(RequestRemotePlayerC2SPacket.class, RequestRemotePlayerC2SPacket::encode, RequestRemotePlayerC2SPacket::new, RequestRemotePlayerC2SPacket::apply);
+//        CHANNEL.register(RemotePlayerS2CPacket.class, RemotePlayerS2CPacket::encode, RemotePlayerS2CPacket::new, RemotePlayerS2CPacket::apply);
+//        CHANNEL.register(RemotePlayerDimensionChangeS2CPacket.class, RemotePlayerDimensionChangeS2CPacket::encode, RemotePlayerDimensionChangeS2CPacket::new, RemotePlayerDimensionChangeS2CPacket::apply);
     }
 
     public static <T> void sendToServer(T message) {
@@ -35,7 +36,7 @@ public class KnockdownsNetwork {
     }
 
     public static <T> void sendToPlayer(PlayerEntity player, T message) {
-        Packet<?> packet = CHANNEL.toPacket(NetworkManager.Side.S2C, message);
+        Packet<?> packet = CHANNEL.toPacket(NetworkManager.Side.S2C, message, player.getRegistryManager());
         Class<?> messageClass = message.getClass();
 
         sendToPlayer(player, packet, messageClass);
@@ -51,7 +52,7 @@ public class KnockdownsNetwork {
     }
 
     public static <T> void sendToWorld(ServerWorld world, T message) {
-        Packet<?> packet = CHANNEL.toPacket(NetworkManager.Side.S2C, message);
+        Packet<?> packet = CHANNEL.toPacket(NetworkManager.Side.S2C, message, world.getRegistryManager());
         Class<?> messageClass = message.getClass();
 
         sendToWorld(world, packet, messageClass);
